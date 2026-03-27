@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://files.catbox.moe/2s5d3y.png" alt="Anime API Logo" width="150"/>
+</p>
+
 # <p align="center">Anime API</p>
 
 <div align="center">
