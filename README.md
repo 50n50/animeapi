@@ -8,6 +8,10 @@
 
 <br/>
 
+> [!TIP]
+> This project uses Deno Deploy. The free tier includes up to 10,000 requests per month. By adding a credit card, the request limit increases to 1,000,000 per month. Charges will not be applied automatically unless the plan is explicitly upgraded. For personal use, the 10,000 request limit is typically sufficient.
+
+
 ## Table of Contents
 
 - [Installation](#installation)
