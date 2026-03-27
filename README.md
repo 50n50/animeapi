@@ -50,20 +50,19 @@
 
     The server will start on [http://localhost:8000](http://localhost:8000).
 
-### Edge Deployment (Deno 2.0+)
+### Quick Deploy (Deno 2.0)
 
-This project is optimized for the new Deno Deploy platform. You can deploy natively via the CLI:
+For the fastest and most reliable deployment, use the GitHub integration:
 
-1. **Create the Project**:
-   ```bash
-   deno deploy create
-   ```
-2. **Naming (Slug)**:
-   > [!IMPORTANT]
-   > When prompted for an **app name**, use only **lowercase letters, numbers, and hyphens** (e.g., `anime-api-paul`). Uppercase letters or spaces will cause a validation error.
+1. **[Fork this repository](https://github.com/your-username/AnimeAPI/fork)** (replace `your-username` with your own).
+2. Go to your [Deno Deploy Dashboard](https://console.deno.com).
+3. Click **"New Project"** → **"Deploy a repository"**.
+4. Select your fork and set the entrypoint to `main.ts`.
+5. Click **Deploy**. Your API will be live instantly!
 
-3. **Automatic Deployments**:
-   For the best experience, connect your GitHub repository to [Deno Deploy](https://deno.com/deploy) to enable automatic edge deployments on every push.
+> [!TIP]
+> Once connected, every `git push` will automatically update your live API at the edge.
+
 
 
 
