@@ -54,7 +54,7 @@
 
 For the fastest and most reliable deployment, use the GitHub integration:
 
-1. **[Fork this repository](https://github.com/your-username/AnimeAPI/fork)** (replace `your-username` with your own).
+1. **[Fork this repository](https://github.com/50n50/AnimeAPI/fork)**.
 2. Go to your [Deno Deploy Dashboard](https://console.deno.com).
 3. Click **"New Project"** → **"Deploy a repository"**.
 4. Select your fork and set the entrypoint to `main.ts`.
