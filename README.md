@@ -5,7 +5,7 @@
 # <p align="center">Anime API</p>
 
 <div align="center">
-    A highly optimized RESTful streaming API providing programmatic access to over <strong>13,000 anime titles</strong>, with full support for <strong>Hardsub, Dub, and Softsub</strong> media streams.
+    A highly optimized RESTful streaming API providing programmatic access to info of over <strong>13,000 anime titles.</strong>
 
   <br/>
 </div>
