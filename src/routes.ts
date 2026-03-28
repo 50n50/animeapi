@@ -4,6 +4,7 @@ import { getHome, getTrending } from "./scrapers/home.ts";
 import { getAnimeDetails, getRandomAnime } from "./scrapers/details.ts";
 import { getAnimeEpisodes } from "./scrapers/episodes.ts";
 import { getStreamUrl } from "./scrapers/stream.ts";
+import { getSchedule } from "./scrapers/schedule.ts";
 
 export const scraperRoutes = new Hono();
 
@@ -177,5 +178,16 @@ scraperRoutes.get("/stream", async (c) => {
     return c.json({ success: true, data });
   } catch (error: any) {
     return c.json({ success: false, error: error.message }, 500);
+  }
+});
+
+scraperRoutes.get("/schedule", async (c) => {
+  try {
+    const time = c.req.query("time");
+    const tz = c.req.query("tz"); // Optional, will default to +00:00 inside the scraper
+    const data = await getSchedule(time, tz);
+    return c.json({ success: true, data });
+  } catch (error: any) {
+    return c.json({ success: false, error: error.message }, 400);
   }
 });

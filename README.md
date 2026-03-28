@@ -30,6 +30,7 @@
     - [GET Anime Details](#get-anime-details)
     - [GET Anime Episodes](#get-anime-episodes)
     - [GET Anime Stream](#get-anime-stream)
+    - [GET Schedule](#get-schedule)
 
 ## <span id="installation">💻 Installation</span>
 
@@ -640,6 +641,57 @@ console.log(data);
     ],
     download: "https://megaup.cc/download/..."
   }
+}
+```
+[🔼 Back to Top](#table-of-contents)
+
+</details>
+
+<details>
+
+<summary>
+
+### `GET` Schedule
+
+</summary>
+
+#### Endpoint
+
+```bash
+/api/schedule?time={time}&tz={tz}
+```
+
+#### Query Parameters
+
+| Parameter |  Type  |     Description      | Required? | Default |
+| :-------: | :----: | :------------------: | :-------: | :-----: |
+| `time` | string \| number | A date string (e.g. `2024-01-01`) or a UNIX timestamp (seconds or ms). |    No    |   Current UNIX timestamp defaults to `now`.    |
+| `tz` | string | A URL Encoded Timezone string (e.g. `%2B01%3A00` for `+01:00`). |    No    |   `+00:00`    |
+
+#### Request Sample
+
+```javascript
+const resp = await fetch("/api/schedule?time=1776038400&tz=%2B01%3A00");
+const data = await resp.json();
+console.log(data);
+```
+
+#### Response Schema
+
+```javascript
+{
+  success: true,
+  data: [
+    {
+      id: "observation-records-of-my-fiancee-qmylr",
+      time: "15:00",
+      title: "Jishou Akuyaku Reijou na...",
+      jpTitle: "Jishou Akuyaku Reijou na...",
+      episode: "EP 2",
+      link: "/watch/observation-records-of-my-fiancee-qmylr"
+    },
+    //...
+  ]
 }
 ```
 
