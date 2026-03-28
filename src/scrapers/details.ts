@@ -113,3 +113,25 @@ export async function getRandomAnime() {
   if (!id) throw new Error("Failed to resolve random anime ID");
   return getAnimeDetails(id);
 }
+
+export async function getNextEpisode(id: string) {
+  const html = await fetchPage(`${BASE}/watch/${id}`);
+  const $ = cheerio.load(html);
+
+  const announcement = $("#announcement");
+  if (!announcement.length) return null;
+
+  const timeEl = announcement.find(".local-time");
+  const timestampText = timeEl.attr("data-time") || "0";
+  const timestamp = parseInt(timestampText, 10);
+  const dateStr = timeEl.text().trim();
+
+  // The 'data-to' attribute on '.count-down' could also be used for the exact target
+  // but we'll return both the parsed stamp and the string for convenience.
+  if (!timestamp) return null;
+
+  return {
+    timestamp,
+    date: dateStr
+  };
+}

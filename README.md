@@ -36,6 +36,7 @@
     - [GET Recent](#get-recent)
     - [GET Random](#get-random)
     - [GET Anime Details](#get-anime-details)
+    - [GET Next Episode](#get-next-episode)
     - [GET Anime Episodes](#get-anime-episodes)
     - [GET Anime Stream](#get-anime-stream)
     - [GET Schedule](#get-schedule)
@@ -541,6 +542,52 @@ console.log(data);
       }
     ],
     recommended: [...]
+  }
+}
+```
+
+[🔼 Back to Top](#table-of-contents)
+
+</details>
+
+<details>
+
+<summary>
+
+### `GET` Next Episode
+
+</summary>
+
+#### Endpoint
+
+```bash
+/api/next-episode/{id}
+```
+
+#### Path Parameters
+
+| Parameter |  Type  |             Description              | Required? | Default |
+| :-------: | :----: | :----------------------------------: | :-------: | :-----: |
+| `id`      | string | The unique anime id (in kebab case). |    Yes    |   --    |
+
+#### Request Sample
+
+```javascript
+const resp = await fetch("/api/next-episode/release-that-witch-wrrw1");
+const data = await resp.json();
+console.log(data);
+```
+
+#### Response Schema
+
+Returns `null` if there is no known next episode, otherwise:
+
+```javascript
+{
+  success: true,
+  data: {
+    timestamp: 1774893600,
+    date: "2026/03/30 18:00 GMT"
   }
 }
 ```

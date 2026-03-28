@@ -1,7 +1,7 @@
 import { Hono } from "@hono/hono";
 import { searchAnime, getGenres, getAnimeByGenre, getTypes, getAnimeByType, getAnimeListByEndpoint, getAZList } from "./scrapers/browse.ts";
 import { getHome, getTrending } from "./scrapers/home.ts";
-import { getAnimeDetails, getRandomAnime } from "./scrapers/details.ts";
+import { getAnimeDetails, getRandomAnime, getNextEpisode } from "./scrapers/details.ts";
 import { getAnimeEpisodes } from "./scrapers/episodes.ts";
 import { getStreamUrl } from "./scrapers/stream.ts";
 import { getSchedule } from "./scrapers/schedule.ts";
@@ -142,6 +142,16 @@ scraperRoutes.get("/details/:id", async (c) => {
   const id = c.req.param("id");
   try {
     const data = await getAnimeDetails(id);
+    return c.json({ success: true, data });
+  } catch (error: any) {
+    return c.json({ success: false, error: error.message }, 500);
+  }
+});
+
+scraperRoutes.get("/next-episode/:id", async (c) => {
+  const id = c.req.param("id");
+  try {
+    const data = await getNextEpisode(id);
     return c.json({ success: true, data });
   } catch (error: any) {
     return c.json({ success: false, error: error.message }, 500);
