@@ -1,5 +1,9 @@
 import { Hono } from "@hono/hono";
-import { searchAnime, getGenres, getAnimeByGenre, getTypes, getAnimeByType, getAnimeListByEndpoint, getHome, getTrending, getAnimeDetails, getAnimeEpisodes, getStreamUrl, getAZList, getRandomAnime } from "./scraper.ts";
+import { searchAnime, getGenres, getAnimeByGenre, getTypes, getAnimeByType, getAnimeListByEndpoint, getAZList } from "./scrapers/browse.ts";
+import { getHome, getTrending } from "./scrapers/home.ts";
+import { getAnimeDetails, getRandomAnime } from "./scrapers/details.ts";
+import { getAnimeEpisodes } from "./scrapers/episodes.ts";
+import { getStreamUrl } from "./scrapers/stream.ts";
 
 export const scraperRoutes = new Hono();
 
@@ -165,7 +169,7 @@ scraperRoutes.get("/episodes/:id", async (c) => {
 scraperRoutes.get("/stream", async (c) => {
   const token = c.req.query("token");
   const type = c.req.query("type");
-  
+
   if (!token) return c.json({ success: false, error: "Missing token parameter" }, 400);
 
   try {

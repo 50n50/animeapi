@@ -1,20 +1,12 @@
-<p align="center">
-  <img src="https://files.catbox.moe/2s5d3y.png" alt="Anime API Logo" width="150"/>
-</p>
-
 # <p align="center">Anime API</p>
 
 <div align="center">
-    A highly optimized RESTful streaming API providing programmatic access to info of over <strong>13,000 anime titles.</strong>
+    A highly optimized RESTful streaming API providing programmatic access to over <strong>13,000 anime titles</strong>, with full support for <strong>Hardsub, Dub, and Softsub</strong> media streams.
 
   <br/>
 </div>
 
 <br/>
-
-> [!TIP]
-> This project uses Deno Deploy. The free tier includes up to 10,000 requests per month. By adding a credit card, the request limit increases to 1,000,000 per month. Charges will not be applied automatically unless the plan is explicitly upgraded. For personal use, the 10,000 request limit is typically sufficient.
-
 
 ## Table of Contents
 
@@ -62,7 +54,7 @@
 
 For the fastest and most reliable deployment, use the GitHub integration:
 
-1. **[Fork this repository](https://github.com/50n50/AnimeAPI/fork)**.
+1. **[Fork this repository](https://github.com/your-username/AnimeAPI/fork)** (replace `your-username` with your own).
 2. Go to your [Deno Deploy Dashboard](https://console.deno.com).
 3. Click **"New Project"** → **"Deploy a repository"**.
 4. Select your fork and set the entrypoint to `main.ts`.
