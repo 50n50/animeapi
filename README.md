@@ -98,21 +98,41 @@ The endpoints exposed by the api are listed below with examples. All responses f
 
 ```javascript
 const resp = await fetch("/api/home");
-const data = await resp.json();
-console.log(data);
+const { success, data } = await resp.json();
 ```
 
-#### Response Schema
+#### Response Sample
 
-```javascript
+```json
 {
-  success: true,
-  data: {
-    featured: [...],
-    trending: [...],
-    latestSub: [...],
-    latestDub: [...],
-    latestChina: [...]
+  "success": true,
+  "data": {
+    "featured": [
+      {
+        "title": "One Piece",
+        "jpTitle": "ワンピース",
+        "image": "https://anikai.to/images/poster.jpg",
+        "desc": "Gold Roger was known as the Pirate King...",
+        "link": "/watch/one-piece",
+        "sub": 1080,
+        "dub": 1000,
+        "type": "TV",
+        "genres": "Action, Adventure, Fantasy",
+        "rating": "PG-13",
+        "release": "1999",
+        "quality": "HD"
+      }
+    ],
+    "trending": {
+      "now": [...],
+      "day": [...],
+      "week": [...],
+      "month": [...]
+    },
+    "latestUpdates": [...],
+    "newReleases": [...],
+    "upcoming": [...],
+    "completed": [...]
   }
 }
 ```
@@ -145,8 +165,29 @@ console.log(data);
 
 ```javascript
 const resp = await fetch("/api/trending?period=week");
-const data = await resp.json();
-console.log(data);
+const { success, data } = await resp.json();
+```
+
+#### Response Sample
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "title": "Chainsaw Man",
+      "jpTitle": "チェンソーマン",
+      "link": "/watch/chainsaw-man",
+      "image": "https://anikai.to/images/chainsaw.jpg",
+      "tooltipId": "chainsaw-man",
+      "sub": 12,
+      "dub": 12,
+      "episodes": 12,
+      "type": "TV",
+      "rank": 1
+    }
+  ]
+}
 ```
 
 [🔼 Back to Top](#table-of-contents)
@@ -181,8 +222,34 @@ console.log(data);
 
 ```javascript
 const resp = await fetch("/api/search?keyword=naruto&status[]=airing&sort=score");
-const data = await resp.json();
-console.log(data);
+const { success, data } = await resp.json();
+```
+
+#### Response Sample
+
+```json
+{
+  "success": true,
+  "data": {
+    "results": [
+      {
+        "title": "Naruto: Shippuden",
+        "jpTitle": "ナルト- 疾風伝",
+        "link": "/watch/naruto-shippuden",
+        "image": "...",
+        "sub": 500,
+        "dub": 500,
+        "episodes": 500,
+        "type": "TV"
+      }
+    ],
+    "pagination": {
+      "currentPage": 1,
+      "hasNextPage": true,
+      "totalPages": 25
+    }
+  }
+}
 ```
 
 [🔼 Back to Top](#table-of-contents)
@@ -240,8 +307,20 @@ console.log(data);
 
 ```javascript
 const resp = await fetch("/api/genres");
-const data = await resp.json();
-console.log(data);
+const { success, data } = await resp.json();
+```
+
+#### Response Sample
+
+```json
+{
+  "success": true,
+  "data": [
+    { "name": "Action", "href": "/genres/action" },
+    { "name": "Adventure", "href": "/genres/adventure" },
+    { "name": "Fantasy", "href": "/genres/fantasy" }
+  ]
+}
 ```
 
 [🔼 Back to Top](#table-of-contents)
@@ -273,8 +352,27 @@ console.log(data);
 
 ```javascript
 const resp = await fetch("/api/genre/action?page=1");
-const data = await resp.json();
-console.log(data);
+const { success, data } = await resp.json();
+```
+
+#### Response Sample
+
+```json
+{
+  "success": true,
+  "data": {
+    "results": [
+      {
+        "title": "Solo Leveling",
+        "link": "/watch/solo-leveling",
+        "image": "...",
+        "sub": 12,
+        "type": "TV"
+      }
+    ],
+    "pagination": { "currentPage": 1, "hasNextPage": true, "totalPages": 10 }
+  }
+}
 ```
 
 [🔼 Back to Top](#table-of-contents)
@@ -331,8 +429,27 @@ console.log(data);
 
 ```javascript
 const resp = await fetch("/api/type/movie?page=1");
-const data = await resp.json();
-console.log(data);
+const { success, data } = await resp.json();
+```
+
+#### Response Sample
+
+```json
+{
+  "success": true,
+  "data": {
+    "results": [
+      {
+        "title": "Your Name.",
+        "link": "/watch/your-name",
+        "image": "...",
+        "sub": 1,
+        "type": "Movie"
+      }
+    ],
+    "pagination": { "currentPage": 1, "hasNextPage": false, "totalPages": 1 }
+  }
+}
 ```
 
 [🔼 Back to Top](#table-of-contents)
@@ -493,55 +610,37 @@ console.log(data); // Returns deep metadata identical to Anime Details
 #### Request Sample
 
 ```javascript
-const resp = await fetch("/api/details/naruto-9r5k");
-const data = await resp.json();
-console.log(data);
+const resp = await fetch("/api/details/one-piece");
+const { success, data } = await resp.json();
 ```
 
-#### Response Schema
+#### Response Sample
 
-```javascript
+```json
 {
-  success: true,
-  data: {
-    id: "naruto-9r5k",
-    title: "Naruto",
-    jpTitle: "NARUTO",
-    altTitle: "",
-    aniId: 20,
-    malId: 20,
-    alId: 20,
-    rating: "PG 13",
-    sub: 220,
-    dub: 220,
-    type: "TV",
-    desc: "Twelve years prior to the events...",
-    details: {
-      japanese: "NARUTO",
-      synonyms: "Naruto",
-      aired: "Oct 3, 2002 to Feb 8, 2007",
-      premiered: "Fall 2002",
-      duration: "23m",
-      status: "Finished Airing",
-      mal_score: "7.99",
-      genres: [
-        { name: "Action", url: "/genres/action" },
-        //...
-      ],
-      studios: [...],
-      producers: [...]
+  "success": true,
+  "data": {
+    "id": "one-piece",
+    "title": "One Piece",
+    "jpTitle": "ワンピース",
+    "aniId": 21,
+    "malId": 21,
+    "rating": "PG-13",
+    "sub": 1080,
+    "dub": 1000,
+    "type": "TV",
+    "desc": "Gold Roger was known as the Pirate King...",
+    "details": {
+      "japanese": "ワンピース",
+      "synonyms": "OP",
+      "aired": "Oct 20, 1999 to ?",
+      "status": "Currently Airing",
+      "genres": [{ "name": "Action", "url": "/genres/action" }]
     },
-    score: 8.6,
-    reviews: 62450,
-    relations: [
-      {
-        id: "naruto-shippuden-j1kn",
-        title: "Naruto: Shippuden",
-        poster: "...",
-        relation: "Sequel"
-      }
-    ],
-    recommended: [...]
+    "score": 8.7,
+    "reviews": 150000,
+    "relations": [...],
+    "recommended": [...]
   }
 }
 ```
@@ -619,26 +718,23 @@ Returns `null` if there is no known next episode, otherwise:
 #### Request Sample
 
 ```javascript
-const resp = await fetch("/api/episodes/naruto-9r5k");
-const data = await resp.json();
-console.log(data);
+const resp = await fetch("/api/episodes/one-piece");
+const { success, data } = await resp.json();
 ```
 
-#### Response Schema
+#### Response Sample
 
-```javascript
+```json
 {
-  success: true,
-  data: [
+  "success": true,
+  "data": [
     {
-      num: "1",
-      token: "xyz_secure_token",
-      title: "Enter: Naruto Uzumaki!",
-      isFiller: false,
-      sub: true,
-      dub: true
-    },
-    //...
+      "number": 1,
+      "token": "a1b2c3d4",
+      "title": "I'm Luffy! The Man Who's Gonna Be King of the Pirates!",
+      "isFiller": false,
+      "langs": 3
+    }
   ]
 }
 ```
@@ -672,29 +768,18 @@ console.log(data);
 #### Request Sample
 
 ```javascript
-const resp = await fetch("/api/stream?token=xyz_secure_token&type=dub");
-const data = await resp.json();
-console.log(data);
+const resp = await fetch("/api/stream?token=a1b2c3d4&type=sub");
+const { success, data } = await resp.json();
 ```
 
-#### Response Schema
+#### Response Sample
 
-```javascript
+```json
 {
-  success: true,
-  data: {
-    sources: [
-      {
-        file: ""
-      }
-    ],
-    tracks: [
-      {
-        file: "",
-        kind: "thumbnails"
-      }
-    ],
-    download: ""
+  "success": true,
+  "data": {
+    "Sub": "https://delivery-node.com/m3u8/...",
+    "Dub": null
   }
 }
 ```
