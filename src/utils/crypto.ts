@@ -1,5 +1,4 @@
 import { fetchJSON, DEFAULT_HEADERS } from "./http.ts";
-
 const ENC_API = "https://enc-dec.app/api";
 
 export async function encrypt(text: string): Promise<string> {
@@ -8,8 +7,13 @@ export async function encrypt(text: string): Promise<string> {
 }
 
 export async function decrypt(text: string): Promise<string> {
-  const data = await fetchJSON(`${ENC_API}/dec-kai?text=${encodeURIComponent(text)}`);
-  return data.result;
+  const res = await fetch(`${ENC_API}/dec-kai?text=${text}`, {
+    headers: DEFAULT_HEADERS,
+    signal: AbortSignal.timeout(10000)
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status} for dec-kai`);
+  const json = await res.json();
+  return json.result;
 }
 
 export async function decryptMega(text: string): Promise<any> {
