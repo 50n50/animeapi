@@ -85,32 +85,36 @@ export async function getStreamUrl(token: string, reqType?: string) {
         } else if (typeof raw === "object") {
           parsed = raw;
         }
-        return { name: item.type, url: parsed?.url || null };
+        return { name: item.type, url: parsed?.url || null, skip: parsed?.skip || null };
       } catch {
-        return { name: item.type, url: null };
+        return { name: item.type, url: null, skip: null };
       }
     })
   );
 
-  const decryptedUrls: Record<string, string | null> = {};
-  decryptResults.forEach(r => { decryptedUrls[r.name] = r.url; });
+  const decryptedData: Record<string, { url: string | null; skip: any }> = {};
+  decryptResults.forEach(r => { decryptedData[r.name] = { url: r.url, skip: r.skip }; });
 
-  const getFinalStream = async (url: string | null) => {
-    if (!url) return null;
+  const getFinalStream = async (data: { url: string | null; skip: any } | undefined) => {
+    if (!data || !data.url) return null;
     try {
-      const mediaUrl = url.replace("/e/", "/media/");
+      const mediaUrl = data.url.replace("/e/", "/media/");
       const res = await fetch(mediaUrl, { headers: DEFAULT_HEADERS, signal: AbortSignal.timeout(10000) });
       const json = await res.json();
-      return await decryptMega(json.result);
+      const streamData = await decryptMega(json.result);
+      if (data.skip) {
+        streamData.skip = data.skip;
+      }
+      return streamData;
     } catch {
       return null;
     }
   };
 
   const finalPromises: Promise<any>[] = [];
-  if (decryptedUrls["Sub"]) finalPromises.push(getFinalStream(decryptedUrls["Sub"]).then(data => ({ title: "Hardsub", ...data })));
-  if (decryptedUrls["Dub"]) finalPromises.push(getFinalStream(decryptedUrls["Dub"]).then(data => ({ title: "Dub", ...data })));
-  if (decryptedUrls["Softsub"]) finalPromises.push(getFinalStream(decryptedUrls["Softsub"]).then(data => ({ title: "Softsub", ...data })));
+  if (decryptedData["Sub"]) finalPromises.push(getFinalStream(decryptedData["Sub"]).then(data => ({ title: "Hardsub", ...data })));
+  if (decryptedData["Dub"]) finalPromises.push(getFinalStream(decryptedData["Dub"]).then(data => ({ title: "Dub", ...data })));
+  if (decryptedData["Softsub"]) finalPromises.push(getFinalStream(decryptedData["Softsub"]).then(data => ({ title: "Softsub", ...data })));
 
   const rawStreams = await Promise.all(finalPromises);
   const streams = rawStreams.filter(s => s && s.sources);

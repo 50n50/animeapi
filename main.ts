@@ -1,8 +1,31 @@
 import { Hono } from "@hono/hono";
+import { serveStatic } from "@hono/hono/deno";
+import { AsyncLocalStorage } from "node:async_hooks";
 import { scraperRoutes } from "./src/routes.ts";
 import { proxyRoutes } from "./src/proxy.ts";
 
+const asyncLocalStorage = new AsyncLocalStorage<string>();
+
+const originalFetch = globalThis.fetch;
+globalThis.fetch = async (input, init) => {
+  const url = input instanceof Request ? input.url : input.toString();
+  const res = await originalFetch(input, init);
+  const statusText = res.status === 200 ? "OK" : "";
+  const endpoint = asyncLocalStorage.getStore() || "Outbound";
+  console.log(`[${endpoint}] ${url} (${res.status}${statusText ? " " + statusText : ""})`);
+  return res;
+};
+
 const app = new Hono();
+
+app.get("/favicon.ico", serveStatic({ path: "./src/favicon.png" }));
+app.get("/404.png", serveStatic({ path: "./src/404.png" }));
+
+app.use("*", async (c, next) => {
+  return await asyncLocalStorage.run(c.req.path, async () => {
+    await next();
+  });
+});
 
 app.get("/", (c) => {
   return c.html(`
@@ -12,6 +35,7 @@ app.get("/", (c) => {
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Anime API</title>
+      <link rel="icon" type="image/png" href="/favicon.ico">
       <style>
         body {
           margin: 0;
@@ -44,6 +68,7 @@ app.get("/", (c) => {
     </head>
     <body>
       <div>
+        <img src="/favicon.ico" alt="Anime API Logo" style="width: 200px; height: 200px; border-radius: 50%; margin-bottom: 1.5rem; border: 1px solid #333;">
         <h1>Anime API</h1>
         <p>Please refer to the <a href="https://github.com/50n50/animeapi">docs</a> for usage.</p>
         <p><a href="/test">Run API Tests</a></p>
@@ -62,6 +87,7 @@ app.get("/test", (c) => {
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Anime API Tests</title>
+      <link rel="icon" type="image/png" href="/favicon.ico">
       <style>
         body {
           margin: 0;
@@ -188,6 +214,58 @@ app.get("/test", (c) => {
 
 app.route("/api", scraperRoutes);
 app.route("/proxy", proxyRoutes);
+
+app.notFound((c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Anime API - 404</title>
+      <link rel="icon" type="image/png" href="/favicon.ico">
+      <style>
+        body {
+          margin: 0;
+          font-family: monospace;
+          background-color: #000;
+          color: #fff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 100vh;
+          text-align: center;
+        }
+        h1 {
+          margin: 0 0 1rem 0;
+          font-weight: normal;
+        }
+        a {
+          color: #58a6ff;
+          text-decoration: none;
+        }
+        a:hover {
+          text-decoration: underline;
+        }
+        .credits {
+          margin-top: 2rem;
+          font-size: 0.8rem;
+          color: #555;
+        }
+      </style>
+    </head>
+    <body>
+      <div>
+        <img src="/404.png" alt="404 Not Found" style="width: 200px; height: 200px; border-radius: 50%; margin-bottom: 1.5rem; border: 1px solid #333;">
+        <h1>404 - Not Found</h1>
+        <p>The page you are looking for doesn't exist.</p>
+        <p><a href="/">Go back home</a></p>
+        <div class="credits">made by 50/50, aka paul</div>
+      </div>
+    </body>
+    </html>
+  `, 404);
+});
 
 Deno.serve(app.fetch);
 export default app;
