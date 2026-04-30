@@ -1,5 +1,6 @@
 import { Hono } from "@hono/hono";
 import { scraperRoutes } from "./src/routes.ts";
+import { proxyRoutes } from "./src/proxy.ts";
 
 const app = new Hono();
 
@@ -186,6 +187,7 @@ app.get("/test", (c) => {
 });
 
 app.route("/api", scraperRoutes);
+app.route("/proxy", proxyRoutes);
 
 Deno.serve(app.fetch);
 export default app;
